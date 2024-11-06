@@ -1,4 +1,4 @@
-package com.choidh;
+package com.choidh.data;
 
 import java.math.BigDecimal;
 

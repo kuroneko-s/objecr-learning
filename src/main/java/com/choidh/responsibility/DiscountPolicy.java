@@ -1,4 +1,4 @@
-package com.choidh;
+package com.choidh.responsibility;
 
 import java.util.ArrayList;
 import java.util.Arrays;

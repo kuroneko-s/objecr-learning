@@ -1,4 +1,4 @@
-package com.choidh;
+package com.choidh.responsibility;
 
 import java.time.Duration;
 

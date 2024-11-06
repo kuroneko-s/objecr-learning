@@ -1,4 +1,4 @@
-package com.choidh;
+package com.choidh.responsibility;
 
 public class AmountDiscountPolicy extends DiscountPolicy {
     private final Money discountAmount;

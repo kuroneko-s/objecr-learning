@@ -1,4 +1,4 @@
-package com.choidh;
+package com.choidh.responsibility;
 
 /**
  * 상영 순번에 따라서 할인 적용
