@@ -1,8 +1,14 @@
 package com.choidh.data;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
+@Setter
 public class Movie {
     private String title;
     private Duration runningTime;
@@ -10,46 +16,42 @@ public class Movie {
 
     private List<DiscountCondition> discountConditions;
     private MovieType movieType;
-    private Money discounyAmount;
+    private Money discountAmount;
     private double discountPercent;
 
-    public MovieType getMovieType() {
-        return movieType;
+    public boolean isDiscountable(LocalDateTime whenScreened, int sequence) {
+        for (DiscountCondition condition : discountConditions) {
+            if (condition.getType() == DiscountConditionType.PERIOD) {
+                return condition.isDiscountable(whenScreened.getDayOfWeek(), whenScreened.toLocalTime());
+            } else {
+                return condition.isDiscountable(sequence);
+            }
+        }
+
+        return false;
     }
 
-    public void setMovieType(MovieType movieType) {
-        this.movieType = movieType;
+    public Money calculateAmountDiscountedFee() {
+        if (movieType != MovieType.AMOUNT_DISCOUNT) {
+            throw new IllegalArgumentException("Movie type is not AMOUNT_DISCOUNT");
+        }
+
+        return fee.minus(discountAmount);
     }
 
-    public Money getFee() {
+    public Money calculatePercentDiscount() {
+        if (movieType != MovieType.PERCENT_DISCOUNT) {
+            throw new IllegalArgumentException("Movie type is not PERCENT_DISCOUNT");
+        }
+
+        return fee.minus(fee.times(discountPercent));
+    }
+
+    public Money calculateNoneDiscountAmount() {
+        if (movieType != MovieType.NONE_DISCOUNT) {
+            throw new IllegalArgumentException("Movie type is not NONE_DISCOUNT");
+        }
+
         return fee;
-    }
-
-    public void setFee(Money fee) {
-        this.fee = fee;
-    }
-
-    public double getDiscountPercent() {
-        return discountPercent;
-    }
-
-    public void setDiscountConditions(List<DiscountCondition> discountConditions) {
-        this.discountConditions = discountConditions;
-    }
-
-    public List<DiscountCondition> getDiscountConditions() {
-        return discountConditions;
-    }
-
-    public Money getDiscounyAmount() {
-        return discounyAmount;
-    }
-
-    public void setDiscounyAmount(Money discounyAmount) {
-        this.discounyAmount = discounyAmount;
-    }
-
-    public void setDiscountPercent(double discountPercent) {
-        this.discountPercent = discountPercent;
     }
 }
